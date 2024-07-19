@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Dropdown</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <table id="data-table">
+        <tr>
+            <th>Row</th>
+            <th>Cell 1</th>
+            <th>Cell 2</th>
+            <th>Cell 3</th>
+            <th>Dropdown</th>
+        </tr>
+        <!-- Example Rows -->
+        <tr>
+            <td>1</td>
+            <td>Row 1, Cell 1</td>
+            <td>Row 1, Cell 2</td>
+            <td>Row 1, Cell 3</td>
+            <td></td> <!-- Dropdown will be added here -->
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Row 2, Cell 1</td>
+            <td>Row 2, Cell 2</td>
+            <td>Row 2, Cell 3</td>
+            <td></td> <!-- Dropdown will be added here -->
+        </tr>
+        <!-- Add more rows as needed -->
+    </table>
+    <button onclick="applySelectedOptionToAll()">Apply to All</button>
+
+    <script>
+        function createDropdown() {
+            // Create the dropdown element
+            var select = document.createElement('select');
+
+            // Create the Sync option
+            var optionSync = document.createElement('option');
+            optionSync.value = 'sync';
+            optionSync.text = 'Sync';
+            select.appendChild(optionSync);
+
+            // Create the Async option
+            var optionAsync = document.createElement('option');
+            optionAsync.value = 'async';
+            optionAsync.text = 'Async';
+            select.appendChild(optionAsync);
+
+            return select;
+        }
+
+        function addDropdownToAllRows() {
+            // Get all rows in the table, skipping the header row
+            var rows = document.querySelectorAll('#data-table tr:not(:first-child)');
+
+            // Iterate through each row
+            rows.forEach(function(row) {
+                // Create a new dropdown
+                var dropdown = createDropdown();
+
+                // Get the fifth cell or create it if it doesn't exist
+                var cell = row.cells[4];
+                if (!cell) {
+                    cell = row.insertCell(4);
+                } else {
+                    // Clear any existing content
+                    cell.innerHTML = '';
+                }
+
+                // Append the dropdown to the fifth cell
+                cell.appendChild(dropdown);
+            });
+        }
+
+        function applySelectedOptionToAll() {
+            // Get the value of the first dropdown in the table
+            var firstDropdown = document.querySelector('#data-table tr select');
+            if (!firstDropdown) return;
+
+            var selectedValue = firstDropdown.value;
+
+            // Get all dropdowns in the table
+            var dropdowns = document.querySelectorAll('#data-table select');
+
+            // Iterate through each dropdown and set its value to the selected value
+            dropdowns.forEach(function(dropdown) {
+                dropdown.value = selectedValue;
+            });
+        }
+
+        // Add dropdowns to all rows when the page loads
+        window.onload = addDropdownToAllRows;
+    </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+
+<!-- ******************************************************************************************************* -->
+</head>
+<link rel="stylesheet" type="text/css" href="{% static 'css/packof.css' %}">
+
+<script src="{% static 'js/packof.js' %}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const jsonData = JSON.parse('{{ df_json|escapejs }}');
+
+    if (jsonData.length > 0) {
+      createTableHeaders(jsonData);
+      displayRecords(jsonData);
+    } else {
+      console.log("No data to display");
+    }
+    
+    let gettext = document.querySelectorAll('td');
+    let showvalueontop = document.getElementById('showvalueontop')
+    Array.from(gettext).forEach((item) => {
+      item.addEventListener('mouseover', () => {
+        let getData = item.textContent;
+        let sumrisedata = getData.replace(/\s+/g, ' ').trim()
+        showvalueontop.value = sumrisedata;
+      })
+    })
+
+
+  });
+
+</script>
+</head>
+<!-- ******************************************************************************************************* -->
+
+<div class="upload-container">
+  <form id="upload-form">
+
+    <input type="file" id="file-input" accept=".xlsx">
+
+    <button type="submit" class="upload-button">Upload</button>
+  </form>
+</div>
+
+<!-- ******************************************************************************************************* -->
+
+<h2 id="heading">Packof</h2>
+<div class="textareadata">
+  <textarea name="" id="showvalueontop"></textarea>
+</div>
+<div class="tabledatadiv">
+  <table id="recordsTable">
+    <thead></thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+
+<!-- ******************************************************************************************************* -->
+<table id="recordsTable">
+  <thead></thead>
+  <tbody></tbody>
+</table>
+
+<!-- ******************************************************************************************************* -->
+<h3 style="display: none" ;">Color Combination Table</h3>
+<form id="color-combination-form" method="get" action="/packof" style="display: none;">
+  <table class="packoftable" name="text">
+    <thead>
+      <tr>
+        <th>Pack of</th>
+        <th>Color 1</th>
+        <th>Color 2</th>
+        <th>Color 3</th>
+        <th>Color 4</th>
+      </tr>
+    </thead>
+    <tbody id="table-body">
+    </tbody>
+  </table>
+  <button type="submit" class="button">Submit</button>
+</form>
+
+<div id="next-button-container">
+  <button class="next-button" onclick="window.location.href='{% url 'packof_next' %}'">Next</button>
+</div>
+<!-- ******************************************************************************************************* -->
+
+{% endblock %}

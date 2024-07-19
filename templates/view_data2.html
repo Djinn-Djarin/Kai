@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataFrame Render</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.9em;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            overflow: scroll;
+        }
+
+        table thead tr {
+            background-color: #009879;
+            color: #ffffff;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        table th,
+        table td {
+            padding: 12px 15px;
+            border: 1px solid #dddddd;
+        }
+
+        table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        table tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+        }
+
+        table tbody tr:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+
+        table th {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        table tbody td {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 400px;
+            background-color: #555;
+            color: #fff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 100%;
+            /* Position the tooltip above the text */
+            left: 50%;
+            margin-left: -200px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+
+        }
+
+
+
+      
+
+        .textareadata {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 23px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 202px;
+            margin-right: 40px;
+        }
+        .tabledatadiv {
+            margin-top: 250px;
+            overflow: scroll;
+            overflow-y: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="textareadata">
+        <textarea name="" id="showvalueontop"></textarea>
+    </div>
+    <div class="tabledatadiv">
+        <h1>DataFrame Render</h1>
+        <table id="recordsTable">
+            <thead>
+                <tr>
+                    <th>S.No</th>
+                    <th>GB SKU</th>
+                    <th>Part NU</th>
+                    <th>EAN</th>
+                    <th>ASIN</th>
+                    <th>Product Name</th>
+                    <th>Filpkart Title</th>
+                    <th>HSN Code</th>
+                    <th>GST</th>
+                    <th>COGs(inr)</th>
+                    <th>Agreed sale price</th>
+                    <th>MRP</th>
+                    <th>Category</th>
+                    <th>Design</th>
+                    <th>Color</th>
+                    <th>Material</th>
+                    <th>L</th>
+                    <th>W</th>
+                    <th>H</th>
+                    <th>Single Pack</th>
+                    <th>Pack of</th>
+                    <th>Pieces</th>
+                    <th>Product Weight(kg)</th>
+                    <th>Key words</th>
+                    <th>Dimension</th>
+                    <th>Description</th>
+                    <th>Bullet Point 1</th>
+                    <th>Bullet Point 2</th>
+                    <th>Bullet Point 3</th>
+                    <th>Bullet Point 4</th>
+                    <th>Bullet Point 5</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>GB SKU</td>
+                    <td>203-4LA</td>
+                    <td>EAN</td>
+                    <td>ASIN</td>
+                    <td class="tooltip">Kuber Industries Portable 4 Layer Shoe Storage Organizer
+                        <span class="tooltiptext">Kuber Industries Portable 4 Layer Shoe Storage Organizer| Easy to
+                            Installation Detachable | Footwear Organiser with Wheel |Door-Entrance Living-Room Balcony
+                            Decor| 203-4LA| White</span>
+                    </td>
+                    <td>4 Layer Shoe Storage Organizer | Footwear Rack with Wheel |203-4LA|White</td>
+                    <td>94037000</td>
+                    <td>0.18</td>
+                    <td>COGs(inr)</td>
+                    <td>Agreed sale price</td>
+                    <td>MRP</td>
+                    <td>Shoe Rack</td>
+                    <td>Design</td>
+                    <td>Color</td>
+                    <td>PP</td>
+                    <td>73.5</td>
+                    <td>29</td>
+                    <td>61.5</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>3.31kg</td>
+                    <td>shoes flint, chappal stand shoe rack hanger organizer box accessories slipper bedroom home
+                        footwear
+                        4 layer</td>
+                    <td>73.5x29x61.5</td>
+                    <td class="tooltip">The Portable Shoe Storage Organizer offers a functional and space-saving
+                        solution
+                        for footwear storage
+                        <span class="tooltiptext">The Portable Shoe Storage Organizer offers a functional and
+                            space-saving
+                            solution for footwear storage. This easy-to-assemble unit features four detachable shelves
+                            that
+                            can be adjusted to accommodate various shoe types. The organizer's portability is enhanced
+                            by
+                            its wheeled base, allowing for effortless movement throughout your living space. Ideal for
+                            entryways, living rooms, or balconies, this organizer contributes to a clutter-free and
+                            aesthetically pleasing environment.</span>
+                    </td>
+                    <td>PACKAGE CONTAIN: 1 Pieces Multi-Row Shoe Organiser Rack | MATERIAL: PP | DIMENSION: 73.5*29*61.5
+                        CM
+                        | White</td>
+                    <td>Our shoe holder is specifically designed with top flaps, along with little bumps on the surface
+                        to
+                        prevent the upper shoe from slipping off, keeping your space tidy and neat.</td>
+                    <td>EASY TO USE: These Stylish Shoe Stands are easy to use and assemble. With their sleek and
+                        ergonomic
+                        design they can be used at home, office and other places also. There are multiple rows to store
+                        your
+                        shoes. No matter what you wear, slippers or sandals or some other type of footwear, they all can
+                        fit
+                        here easily.</td>
+                    <td>DURABLE AND STURDY MATERIAL: Our shoe organiser is crafted with the best quality and safe
+                        material
+                        to store your shoes. These material provide it enhanced strength and durablity to fulfill your
+                        needs
+                        of shoes collection for a long time.</td>
+                    <td>Space saver: Our Shoe Organizer provide the best solution for your footwear storage and
+                        collection,
+                        you can stack shoes on top of other shoes in different rows. It utilize the space efficiently
+                        and
+                        add a look to your home and office.</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>2000000234161</td>
+                    <td>MC2436</td>
+                    <td>8905721839644</td>
+                    <td>ASIN</td>
+                    <td class="tooltip">Multiple Purpose Storage Basket | Rhombic | Bathroom Kitchen Dressing table
+                        <span class="tooltiptext">Multiple Purpose Storage Basket | Rhombic | Bathroom Kitchen Dressing
+                            table |Toiletry Organizer Bin for Holding Soap, Shampoo,Cosmetics | MC2436 | Light Grey,
+                            Orange</span>
+                    </td>
+                    <td>Multipurpose Storage Basket Rhombic | MC2436 | Light Grey, Orange</td>
+                    <td>39249090</td>
+                    <td>0.18</td>
+                    <td>COGs(inr)</td>
+                    <td>Agreed sale price</td>
+                    <td>MRP</td>
+                    <td>Storage Basket</td>
+                    <td></td>
+                    <td>Light Grey, Orange</td>
+                    <td>PP</td>
+                    <td>25</td>
+                    <td>18</td>
+                    <td>12.5</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>130</td>
+                    <td>basket for tolitries bathroom kitchen dressing table shower caddy with handle organiser hanger
+                        accessories supplies</td>
+                    <td>25cm x 18cm x 12.5cm</td>
+                    <td class="tooltip">Enhance your home organization with the Kuber Industries Multipurpose Storage
+                        Basket
+                        (MC2436)
+                        <span class="tooltiptext">Enhance your home organization with the Kuber Industries Multipurpose
+                            Storage Basket (MC2436). Constructed from high-grade, rhombic plastic, this basket offers
+                            both
+                            durability and a touch of sleek grey finish. This versatile solution seamlessly integrates
+                            into
+                            various environments, functioning as a bathroom caddy for toiletries, a kitchen utensil
+                            organizer, or a dressing table essential for storing cosmetics. The lightweight design
+                            allows
+                            for effortless movement, while the practical form factor promotes clutter reduction and
+                            optimized storage space. The Kuber Industries Multipurpose Storage Basket provides a
+                            professional and aesthetically pleasing approach to maximizing organization within your
+                            living
+                            space.</span>
+                    </td>
+                    <td>PACKAGE CONTAIN: 2 Piece Rhombic Plastic Storage Basket | MC2436 | MATERIAL: PP | PRODUCT
+                        DIMENSION:
+                        25x 8x 2.5 cm| Light Grey, Orange</td>
+                    <td>VERSATILE UTILITY: The Kuber Industries Multiburpose Rhombic Basket is a versatile and
+                        indispensable
+                        addition to your home, offering utility, foldability, and durability. You can use this basket
+                        from
+                        holding a substantial load to serving as a storage solution for toys or toiletries or other
+                        accessories. Crafted with durability in mind, the basket stands up for regular use.</td>
+                    <td>SPACIOUS CAPACITY & DURABILITY: Our Multipurpose Basket with handles, designed to offer enough
+                        space
+                        and lasting durability for your needs to storage small items.</td>
+                    <td>SECURE CLOSURE: Our Multipurpose Basket keeps your bathroom and kitchen accessories contained
+                        and
+                        protected. It ensures that your clothes stay securely inside during transportation or storage.
+                    </td>
+                    <td>DURABLE: Made with high quality materials this multipurpose basket stands out, PP plastic
+                        material
+                        is used to craft this masterpiece which helps to give it a nice finish and durability. It can
+                        withstand sudden forces and jerks, no need to think about the reliability of the basket and make
+                        your laundry chores a joyful ride.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        let gettext = document.querySelectorAll('td');
+        let showvalueontop = document.getElementById('showvalueontop')
+        Array.from(gettext).forEach((item) => {
+            item.addEventListener('mouseover', () => {
+                let getData = item.textContent;
+                let sumrisedata = getData.replace(/\s+/g, ' ').trim()
+                showvalueontop.value = sumrisedata;
+            })
+        })
+    </script>
+</body>
+
+</html>

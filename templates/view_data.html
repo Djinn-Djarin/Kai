@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/view_data.css' %}">
+    <script src="{% static 'js/packof.js' %}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const jsonData = JSON.parse('{{ df_json|escapejs }}');
+
+            if (jsonData.length > 0) {
+                createTableHeaders(jsonData);
+                displayRecords(jsonData);
+            } else {
+                console.log("No data to display");
+            }
+
+            let gettext = document.querySelectorAll('td');
+            let showvalueontop = document.getElementById('showvalueontop')
+            Array.from(gettext).forEach((item) => {
+             item.addEventListener('mouseover', () => {
+          let getData = item.textContent;
+            let sumrisedata = getData.replace(/\s+/g, ' ').trim()
+             showvalueontop.value = sumrisedata;
+    })
+})
+        });
+        
+    </script>
+
+    <meta charset="UTF-8">
+    <title>DataFrame Render</title>
+
+</head>
+
+<div class="textareadata">
+    <textarea name="" id="showvalueontop"></textarea>
+</div>
+<div class="tabledatadiv">
+    <h1>DataFrame Render</h1>
+    <table id="recordsTable">
+        <thead></thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+
+
+
+</html>

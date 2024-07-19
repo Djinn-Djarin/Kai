@@ -1,0 +1,178 @@
+
+
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: #f4f4f9;
+  margin: 0px;
+  padding: 0px;
+}
+
+.upload-container {
+  background-color: #009879;
+  padding: 10px;
+}
+
+#upload-form {
+  color: #ffff;
+}
+
+#file-input {
+  background-color: #ca3354;
+  padding: 7px;
+  margin: 0 5px 0 5px;
+  border: none;
+  color: #ffff;
+}
+
+.upload-button {
+  background-color: #146614;
+  padding: 10px;
+  border: none;
+  color: #ffff;
+}
+
+#heading {
+  display: block;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  overflow: scroll;
+}
+
+table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+  font-weight: bold;
+}
+
+table th,
+table td {
+  padding: 12px 15px;
+  border: 1px solid #dddddd;
+}
+
+table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+table tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+
+table tbody tr:hover {
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+table th {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+table tbody td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 400px;
+  background-color: #555;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 10px;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  /* Position the tooltip above the text */
+  left: 50%;
+  margin-left: -200px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+
+}
+
+.textareadata {
+  width: 84%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 120px;
+}
+
+textarea {
+  width: 100%;
+  height: 100px;
+  margin-right: 10px;
+  margin-top: -30px;
+  resize: none;
+  overflow-y: scroll;
+  ;
+}
+
+.tabledatadiv {
+  margin-top: 120px;
+  overflow: scroll;
+  overflow-y: hidden;
+}
+
+
+#next-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+#next {
+  margin: auto;
+}
+
+.next-button {
+  width: 66px;
+  height: 29px;
+  background: #009879;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 6px;
+
+}
+
+#outputTable{
+    width: 100%;
+    background-color: rgb(187, 141, 141);
+}

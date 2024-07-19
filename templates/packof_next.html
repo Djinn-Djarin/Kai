@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+
+<!-- ******************************************************************************************************* -->
+</head>
+<link rel="stylesheet" type="text/css" href="{% static 'css/packof_next.css' %}">
+
+<script src="{% static 'js/packof.js' %}"></script>
+<!-- ******************************************************************************************************* -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const jsonData = JSON.parse('{{ df_json|escapejs }}');
+
+    if (jsonData.length > 0) {
+      createTableHeaders(jsonData);
+      displayRecords(jsonData);
+      addDropdownToAllRows(); // Call function to add dropdowns after displaying records
+    } else {
+      console.log("No data to display");
+    }
+
+    let gettext = document.querySelectorAll('td');
+    let showvalueontop = document.getElementById('showvalueontop')
+    Array.from(gettext).forEach((item) => {
+      item.addEventListener('mouseover', () => {
+        let getData = item.textContent;
+        let sumrisedata = getData.replace(/\s+/g, ' ').trim()
+        showvalueontop.value = sumrisedata;
+      })
+    })
+  });
+</script>
+</head>
+<!-- ******************************************************************************************************* -->
+
+
+
+<h2 id="heading">Packof</h2>
+
+<div class="textareadata">
+  <textarea name="" id="showvalueontop"></textarea>
+</div>
+
+<form id="inbound_data" method="get" action="/packof">
+  <div class="tabledatadiv">
+    <table id="recordsTable">
+      <thead></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <button type="submit" class="button">Submit</button>
+
+</form>
+
+<!-- ******************************************************************************************************* -->
+
+<h3>Color Combination Table</h3>
+
+<form id="color-combination-form" method="get" action="/packof" style="display: none;">
+  <table class="packoftable" name="text">
+    <thead>
+      <tr>
+        <th>Pack of</th>
+        <th>Color 1</th>
+        <th>Color 2</th>
+        <th>Color 3</th>
+        <th>Color 4</th>
+      </tr>
+    </thead>
+    <tbody id="table-body">
+    </tbody>
+  </table>
+  <button type="submit" class="button">Submit</button>
+</form>
+
+<!-- ******************************************************************************************************* -->
+
+<table id="outputTable">
+  <thead>
+
+  </thead>
+  <tbody>
+
+    </thead>
+  </tbody>
+</table>
+
+
+
+{% endblock %}
