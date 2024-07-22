@@ -8,10 +8,9 @@ from .forms import UploadFileForm
 import pandas as pd
 import os
 from django.conf import settings
-
 from django.core.files.storage import FileSystemStorage
 from .forms import UploadFileForm
-
+import json
 
 # Create your views here.
 def index(request):
@@ -115,6 +114,18 @@ def packof_next(request):
 
     return render(request, 'packof_next.html', context)
 
+@csrf_exempt
+def receive_data(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            print(data)  # Process the data as needed
+            return JsonResponse({"message": "Data received successfully", "data": data})
+        except json.JSONDecodeError:
+            return JsonResponse({"message": "Invalid JSON"}, status=400)
+    else:
+        return JsonResponse({"message": "Method not allowed"}, status=405)
+
 
 # def generated_table(request):
 
@@ -151,3 +162,5 @@ def packof_next(request):
 #     }
 
     # return render(request, 'packof.html', { 'var':var,'context':context})
+
+ 

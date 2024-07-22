@@ -8,6 +8,7 @@ let objKeysarr = [];
 let trueValueArray = [];
 let totalvalueArray = [];
 let outsideflatedarray = [];
+let outsideResultArray = []
 let gettext = document.querySelectorAll('td');
 let showvalueontop = document.getElementById('showvalueontop')
 Array.from(gettext).forEach((item) => {
@@ -26,66 +27,72 @@ function generateCells() {
   // Split the packof input into an array
   const packofArray = packof.split(',');
   let colors = color.split(' ');
-  duplicatepackofarray.push(...packofArray)
+  duplicatepackofarray.push(...packofArray);
+  console.log(packofArray.length, colors.length);
+  console.log(packofArray, colors);
 
 
-  // Get the table element
-  const table = document.getElementById('mainTable');
+  if (packofArray.length <= 1 || colors.length <= 2) {
+    console.log('inifcondition');
+    return null;
+  }
+  else {
+    console.log('inelse');
+    // Get the table element
+    const table = document.getElementById('mainTable');
 
-  // Clear the table content
-  table.innerHTML = '';
+    // Clear the table content
+    table.innerHTML = '';
 
-  // Create the table header
-  const thead = document.createElement('thead');
-  const headerRow = document.createElement('tr');
-  const headers = ['Number', ...colors];
-  console.log(colors, "colors.....");
-  colorsdata.push(...colors);
-  headers.forEach(headerText => {
-    const th = document.createElement('th');
-    th.textContent = headerText;
-    headerRow.appendChild(th);
-  });
-  thead.appendChild(headerRow);
-  table.appendChild(thead);
-  const getLenght = headers.length - 1;
+    // Create the table header
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    const headers = ['Number', ...colors];
+    console.log(colors, "colors.....");
+    colorsdata.push(...colors);
+    headers.forEach(headerText => {
+      const th = document.createElement('th');
+      th.className = 'sideTablecenter'
+      th.textContent = headerText;
+      headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+    const getLenght = headers.length - 1;
 
-  // Create the table body
-  const tbody = document.createElement('tbody');
-  packofArray.forEach((item) => {
-    const row1 = document.createElement('tr');
-    row1.innerHTML = `
-            <td>${item}</td>
+    // Create the table body
+    const tbody = document.createElement('tbody');
+    packofArray.forEach((item) => {
+      const row1 = document.createElement('tr');
+      row1.innerHTML = `
+            <td class="centernumbers">${item}</td>
         `;
-    tbody.appendChild(row1);
-    // tbody.appendChild(row2);
+      tbody.appendChild(row1);
+      // tbody.appendChild(row2);
 
-    for (let i = 0; i < getLenght; i++) {
-      const inputcell = document.createElement('td');
-      const input = document.createElement('input');
-      input.type = 'number';
-      input.className = 'getidvalue';
-      inputcell.appendChild(input);
-      row1.appendChild(inputcell);
-      gettdval.push(inputcell.textContent);
-    }
-    tbody.appendChild(row1);
-  });
-  table.appendChild(tbody);
-  console.log(table);
-  document.getElementById('Sendjsondata').style.display = 'block'
-
-
+      for (let i = 0; i < getLenght; i++) {
+        const inputcell = document.createElement('td');
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.className = 'getidvalue';
+        inputcell.appendChild(input);
+        row1.appendChild(inputcell);
+        gettdval.push(inputcell.textContent);
+      }
+      tbody.appendChild(row1);
+    });
+    table.appendChild(tbody);
+    console.log(table);
+    document.getElementById('Sendjsondata').style.display = 'block'
+  }
 }
-
-
-
 
 let Sendjsondata = document.getElementById('Sendjsondata');
 console.log(Sendjsondata, ": sendjsondata");
 
 Sendjsondata.addEventListener('click', () => {
   console.log('this is log for SendJsonData');
+  let bottomcontainer = document.querySelector('.bottomcontainer').style.display = 'block'
   let rightsidecontainer = document.querySelector('.rightsidecontainer');
   rightsidecontainer.style.display = 'block'
   let getdataval = document.querySelectorAll('.getidvalue');
@@ -110,64 +117,30 @@ Sendjsondata.addEventListener('click', () => {
       resultArray.push(obj);
     }
   });
-  // let formdata = new FormData();
-  // formdata.append('jsondata', resultArray);
   console.log(resultArray, "getfinalobj");
-  resultArray.map((item) => {
-    console.log(item, "itemmm...");
-    console.log(Object.keys(item));
-    const objKeys = Object.keys(item)
-    let getObjValues = Object.values(item);
-    console.log(getObjValues, "getObjvalues");
-    getObjValues.map(innerArray => {
-      let innerarrr = innerArray.map(Number);
-      console.log(innerarrr);
-      let totalval = innerarrr.reduce((accumulator, currentValue) => accumulator + currentValue);
-      console.log(totalval, "total");
-      console.log(objKeys);
-      let objKeysData = objKeys.map(Number);
-      objKeysarr.push(objKeysData);
-      console.log(objKeysarr, "objKeysArr");
-      let flatedarr = objKeysarr.flat();
-      console.log(flatedarr, "flatedarr");
-      totalvalueArray.push(totalval);
-      flatedarr.map((item) => {
-        outsideflatedarray.push(item)
-        console.log(totalval, ":totalval");
-        if (item === totalval) {
-          console.log(true);
-          trueValueArray.push(true);
+  outsideResultArray.push(...resultArray)
 
-        } else {
-          console.log(false);
-          trueValueArray.push(false);
-        }
-      })
-
-    });
-
+  fetch('/receive_data/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(resultArray)
   })
+    .then(response => {
+      console.log(response, "for response");
+      response.json()
+    })
+    .then(data => {
+      if (data.message) {
+        document.getElementById('message').innerText = data.message;
+      }
 
-  console.log(trueValueArray, "truevalueArray");
-  console.log(totalvalueArray, "totalvalueArray");
-  console.log(outsideflatedarray, "flatedarr");
-  let newoutsideflatedarray = outsideflatedarray.slice(colorsdata.length);
-  console.log(newoutsideflatedarray, "newoutsideflatedarray");
-
-
-  if (newoutsideflatedarray.length !== totalvalueArray.length) {
-    throw new Error('Arrays are not of the same length');
-  }
-
-  for (let i = 0; i < newoutsideflatedarray.length; i++) {
-    if (newoutsideflatedarray[i] !== totalvalueArray[i]) {
-      // throw new Error(`Arrays do not match at index ${i}`);
-      alert('someting went rong')
-    }
-  }
-
-
-
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      document.getElementById('message').innerText = 'An error occurred. Please try again.';
+    });
 
 
 });
@@ -182,7 +155,10 @@ function divideArray(arr, n) {
 
 // ***********************************Gaurav*****************************************
 
+function sendData() {
 
+
+}
 
 function uploadfile() {
   document.getElementById('upload-button').addEventListener('click', function () {
@@ -300,6 +276,7 @@ function createTableHeaders(data) {
 
   headers.forEach(header => {
     const th = document.createElement("th");
+    th.className = 'maintabledata'
     th.textContent = header.charAt(0).toUpperCase() + header.slice(1);
     headerRow.appendChild(th);
   });
@@ -320,6 +297,7 @@ function displayRecords(data) {
 
     Object.keys(record).forEach(key => {
       const cell = document.createElement("td");
+      cell.className = 'maintabledata'
       cell.textContent = record[key];
       row.appendChild(cell);
     });
