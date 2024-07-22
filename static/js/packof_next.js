@@ -35,7 +35,7 @@ function generateCells() {
   console.log(packofArray, colors);
 
 
-  if (packofArray.length <= 1 || colors.length <= 2) {
+  if (packofArray.length <= 1 || colors.length <= 0) {
     console.log('inifcondition');
     return null;
   }
@@ -107,12 +107,16 @@ Sendjsondata.addEventListener('click', () => {
   });
 
   let filteredArray = gettdval.filter(item => item.trim() !== '');
+  console.log(filteredArray, "for filterArrayline110......");
   filteredArraydata.push(...filteredArray);
 
   const funcalling = divideArray(filteredArraydata, colorsdata.length);
+  console.log(funcalling, "funcallingarray");
   const getcolorarraylenght = colorsdata.length;
   const getlastarray = funcalling.splice(-getcolorarraylenght);
   let resultArray = [];
+  console.log(duplicatepackofarray, "duplicateArray", );
+  console.log(getlastarray,":getlastarray");
   duplicatepackofarray.forEach((item, i) => {
     if (getlastarray[i]) {
       let obj = {};
@@ -125,27 +129,27 @@ Sendjsondata.addEventListener('click', () => {
   outsideResultArray.push(...resultArray)
 
 
-  fetch('/receive_data/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(resultArray)
-  })
-    .then(response => {
-      console.log(response, "for response");
-      response.json()
-    })
-    .then(data => {
-      if (data.message) {
-        document.getElementById('message').innerText = data.message;
-      }
+  // fetch('//', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json'
+  //   },
+  //   body: JSON.stringify(resultArray)
+  // })
+  //   .then(response => {
+  //     console.log(response, "for response");
+  //     response.json()
+  //   })
+  //   .then(data => {
+  //     if (data.message) {
+  //       document.getElementById('message').innerText = data.message;
+  //     }
 
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-      document.getElementById('message').innerText = 'An error occurred. Please try again.';
-    });
+  //   })
+  //   .catch((error) => {
+  //     console.error('Error:', error);
+  //     document.getElementById('message').innerText = 'An error occurred. Please try again.';
+  //   });
 
 
 });

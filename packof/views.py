@@ -126,7 +126,8 @@ def receive_data(request):
     else:
         return JsonResponse({"message": "Method not allowed"}, status=405)
 
-
+def test2(request):
+    return render(request, 'test2.html')
 # def generated_table(request):
 
 

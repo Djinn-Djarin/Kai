@@ -33,6 +33,7 @@ urlpatterns = [
     path('view_data/', views.view_data, name='view_data'),
     path('packof_next/', views.packof_next, name='packof_next'),
     path('receive_data/', views.receive_data, name='receive_data'),
+    path('test2/', views.test2, name='test2'),
 
   
 ]

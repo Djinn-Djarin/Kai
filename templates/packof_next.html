@@ -122,15 +122,17 @@
       </div>
       <div class="rightsidecontainer">
 
+        <form action="/receive_data/" method="POST">
         <div class="table-container ">
 
           <table id="mainTable">
 
           </table>
+          <button type="button" id="addRowBtn">Add Row</button>
           <button type="submit" id="Sendjsondata">Submit</button>
 
         </div>
-
+      </form>
 
       </div>
     </div>
@@ -170,6 +172,37 @@
   </div>
 </div>
 <script src="{% static 'js/packof_next.js' %}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      const table = document.getElementById('mainTable');
+      const addRowBtn = document.getElementById('addRowBtn');
 
+      addRowBtn.addEventListener('click', function () {
+          // Create a new row
+          const newRow = table.insertRow();
+
+          // Create and insert new cells and input fields dynamically
+          for (let i = 0; i < 3; i++) { // Assume 3 cells per row for this example
+              const newCell = newRow.insertCell();
+              const input = document.createElement('input');
+              input.type = 'text';
+              input.name = `cell_${table.rows.length}_${i}`; // Unique name for each input
+              newCell.appendChild(input);
+          }
+      });
+
+      document.querySelector('form').addEventListener('submit', function (event) {
+          // Before submission, gather all input values into hidden fields
+          const allInputs = table.querySelectorAll('input');
+          allInputs.forEach(input => {
+              const hiddenInput = document.createElement('input');
+              hiddenInput.type = 'hidden';
+              hiddenInput.name = input.name;
+              hiddenInput.value = input.value;
+              this.appendChild(hiddenInput);
+          });
+      });
+  });
+</script>
 
 {% endblock %}

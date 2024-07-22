@@ -1,140 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Dropdown</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-        button {
-            background-color: #4CAF50; /* Green */
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Table</title>
 </head>
 <body>
-    <table id="data-table">
-        <tr>
-            <th>Row</th>
-            <th>Cell 1</th>
-            <th>Cell 2</th>
-            <th>Cell 3</th>
-            <th>Dropdown</th>
-        </tr>
-        <!-- Example Rows -->
-        <tr>
-            <td>1</td>
-            <td>Row 1, Cell 1</td>
-            <td>Row 1, Cell 2</td>
-            <td>Row 1, Cell 3</td>
-            <td></td> <!-- Dropdown will be added here -->
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Row 2, Cell 1</td>
-            <td>Row 2, Cell 2</td>
-            <td>Row 2, Cell 3</td>
-            <td></td> <!-- Dropdown will be added here -->
-        </tr>
-        <!-- Add more rows as needed -->
-    </table>
-    <button onclick="applySelectedOptionToAll()">Apply to All</button>
+  <table id="mainTable">
+    <thead id="tableHead">
+      <!-- Table head will be generated here -->
+    </thead>
+    <tbody id="tableBody">
+      <!-- Table rows will be generated here -->
+    </tbody>
+  </table>
+  <button id="sendDataButton">Send Data</button>
 
-    <script>
-        function createDropdown() {
-            // Create the dropdown element
-            var select = document.createElement('select');
+  <script>
+    // Example data
+    const columns = ['Name', 'Age', 'Email'];
+    const rows = [
+      ['John Doe', 25, 'john@example.com'],
+      ['Jane Smith', 30, 'jane@example.com']
+    ];
 
-            // Create the Sync option
-            var optionSync = document.createElement('option');
-            optionSync.value = 'sync';
-            optionSync.text = 'Sync';
-            select.appendChild(optionSync);
+    // Generate table head
+    const tableHead = document.getElementById('tableHead');
+    const headRow = document.createElement('tr');
+    columns.forEach(column => {
+      const th = document.createElement('th');
+      th.textContent = column;
+      headRow.appendChild(th);
+    });
+    tableHead.appendChild(headRow);
 
-            // Create the Async option
-            var optionAsync = document.createElement('option');
-            optionAsync.value = 'async';
-            optionAsync.text = 'Async';
-            select.appendChild(optionAsync);
+    // Generate table rows
+    const tableBody = document.getElementById('tableBody');
+    rows.forEach(rowData => {
+      const tr = document.createElement('tr');
+      rowData.forEach(cellData => {
+        const td = document.createElement('td');
+        td.textContent = cellData;
+        tr.appendChild(td);
+      });
+      tableBody.appendChild(tr);
+    });
 
-            return select;
-        }
+    // Extract table data
+    function extractTableData() {
+      const table = document.getElementById('mainTable');
+      const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent);
+      const rows = Array.from(table.querySelectorAll('tbody tr')).map(tr => {
+        return Array.from(tr.querySelectorAll('td')).map(td => td.textContent);
+      });
 
-        function addDropdownToAllRows() {
-            // Get all rows in the table, skipping the header row
-            var rows = document.querySelectorAll('#data-table tr:not(:first-child)');
+      return { headers, rows };
+    }
 
-            // Iterate through each row
-            rows.forEach(function(row) {
-                // Create a new dropdown
-                var dropdown = createDropdown();
+    // Send data to backend
+    document.getElementById('sendDataButton').addEventListener('click', () => {
+      const tableData = extractTableData();
 
-                // Get the fifth cell or create it if it doesn't exist
-                var cell = row.cells[4];
-                if (!cell) {
-                    cell = row.insertCell(4);
-                } else {
-                    // Clear any existing content
-                    cell.innerHTML = '';
-                }
-
-                // Append the dropdown to the fifth cell
-                cell.appendChild(dropdown);
-            });
-        }
-
-        function applySelectedOptionToAll() {
-            // Get the value of the first dropdown in the table
-            var firstDropdown = document.querySelector('#data-table tr select');
-            if (!firstDropdown) return;
-
-            var selectedValue = firstDropdown.value;
-
-            // Get all dropdowns in the table
-            var dropdowns = document.querySelectorAll('#data-table select');
-
-            // Iterate through each dropdown and set its value to the selected value
-            dropdowns.forEach(function(dropdown) {
-                dropdown.value = selectedValue;
-            });
-        }
-
-        // Add dropdowns to all rows when the page loads
-        window.onload = addDropdownToAllRows;
-    </script>
+      fetch('http://127.0.0.1:8000/receive_data/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(tableData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    });
+  </script>
 </body>
 </html>
