@@ -9,6 +9,8 @@ let trueValueArray = [];
 let totalvalueArray = [];
 let outsideflatedarray = [];
 let outsideResultArray = []
+
+let colorsvalues = [];
 let gettext = document.querySelectorAll('td');
 let showvalueontop = document.getElementById('showvalueontop')
 Array.from(gettext).forEach((item) => {
@@ -26,7 +28,8 @@ function generateCells() {
   const color = document.getElementById('color').value;
   // Split the packof input into an array
   const packofArray = packof.split(',');
-  let colors = color.split(' ');
+  let colors = color.split(',');
+  colorsvalues.push(...colors);
   duplicatepackofarray.push(...packofArray);
   console.log(packofArray.length, colors.length);
   console.log(packofArray, colors);
@@ -117,8 +120,10 @@ Sendjsondata.addEventListener('click', () => {
       resultArray.push(obj);
     }
   });
+  resultArray.push(...colorsvalues)
   console.log(resultArray, "getfinalobj");
   outsideResultArray.push(...resultArray)
+
 
   fetch('/receive_data/', {
     method: 'POST',
