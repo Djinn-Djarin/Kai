@@ -1,3 +1,4 @@
+// *****************Gaurav*****************************
 let gettdval = [];
 let colorsdata = [];
 let filteredArraydata = [];
@@ -18,6 +19,7 @@ Array.from(gettext).forEach((item) => {
 })
 
 function generateCells() {
+  console.log('this is for genrate table');
   // Get the input values
   const packof = document.getElementById('packof').value;
   const color = document.getElementById('color').value;
@@ -70,15 +72,20 @@ function generateCells() {
     tbody.appendChild(row1);
   });
   table.appendChild(tbody);
+  console.log(table);
   document.getElementById('Sendjsondata').style.display = 'block'
 
 
 }
 
 
-// add new javascript file
 
-document.getElementById('Sendjsondata').addEventListener('submit', () => {
+
+let Sendjsondata = document.getElementById('Sendjsondata');
+console.log(Sendjsondata, ": sendjsondata");
+
+Sendjsondata.addEventListener('click', () => {
+  console.log('this is log for SendJsonData');
   let rightsidecontainer = document.querySelector('.rightsidecontainer');
   rightsidecontainer.style.display = 'block'
   let getdataval = document.querySelectorAll('.getidvalue');
@@ -103,8 +110,8 @@ document.getElementById('Sendjsondata').addEventListener('submit', () => {
       resultArray.push(obj);
     }
   });
-  let formdata = new FormData();
-  formdata.append('jsondata', resultArray);
+  // let formdata = new FormData();
+  // formdata.append('jsondata', resultArray);
   console.log(resultArray, "getfinalobj");
   resultArray.map((item) => {
     console.log(item, "itemmm...");
@@ -173,13 +180,7 @@ function divideArray(arr, n) {
   return result;
 }
 
-
-
-
-
-
-
-
+// ***********************************Gaurav*****************************************
 
 
 
@@ -220,7 +221,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (jsonData.length > 0) {
     createTableHeaders(jsonData);
     displayRecords(jsonData);
-    addDropdownToAllRows(); // Call function to add dropdowns after displaying records
+
   } else {
     console.log("No data to display");
   }
@@ -295,6 +296,7 @@ function createTableHeaders(data) {
   tableHead.innerHTML = "";
   const headers = Object.keys(data[0]);
   const headerRow = document.createElement("tr");
+  console.log(headerRow)
 
   headers.forEach(header => {
     const th = document.createElement("th");
@@ -302,9 +304,9 @@ function createTableHeaders(data) {
     headerRow.appendChild(th);
   });
 
-  const th = document.createElement("th");
-  th.textContent = "Dropdown"; // Adding header for the dropdown column
-  headerRow.appendChild(th);
+  // const th = document.createElement("th");
+  // th.textContent = "Dropdown"; // Adding header for the dropdown column
+  // headerRow.appendChild(th);
 
   tableHead.appendChild(headerRow);
 }
@@ -322,70 +324,11 @@ function displayRecords(data) {
       row.appendChild(cell);
     });
 
-    const dropdownCell = document.createElement("td");
-    row.appendChild(dropdownCell); // Create empty cell for the dropdown
 
     tableBody.appendChild(row);
   });
 }
 
-function createDropdown() {
-  // Create the dropdown element
-  var select = document.createElement('select');
-
-  // Create the Sync option
-  var optionSync = document.createElement('option');
-  optionSync.value = 'sync';
-  optionSync.text = 'Sync';
-  select.appendChild(optionSync);
-
-  // Create the Async option
-  var optionAsync = document.createElement('option');
-  optionAsync.value = 'async';
-  optionAsync.text = 'Async';
-  select.appendChild(optionAsync);
-
-  return select;
-}
-
-function addDropdownToAllRows() {
-  // Get all rows in the table, skipping the header row
-  var rows = document.querySelectorAll('#recordsTable tbody tr');
-
-  // Iterate through each row
-  rows.forEach(function (row) {
-    // Create a new dropdown
-    var dropdown = createDropdown();
-
-    // Get the fifth cell or create it if it doesn't exist
-    var cell = row.cells[2];
-    if (!cell) {
-      cell = row.insertCell(2);
-    } else {
-      // Clear any existing content
-      cell.innerHTML = '';
-    }
-
-    // Append the dropdown to the fifth cell
-    cell.appendChild(dropdown);
-  });
-}
-
-function applySelectedOptionToAll() {
-  // Get the value of the first dropdown in the table
-  var firstDropdown = document.querySelector('#recordsTable tbody tr select');
-  if (!firstDropdown) return;
-
-  var selectedValue = firstDropdown.value;
-
-  // Get all dropdowns in the table
-  var dropdowns = document.querySelectorAll('#recordsTable tbody select');
-
-  // Iterate through each dropdown and set its value to the selected value
-  dropdowns.forEach(function (dropdown) {
-    dropdown.value = selectedValue;
-  });
-}
 
 // Ensure the addDropdownToAllRows is called at the right time
 document.addEventListener("DOMContentLoaded", function () {
@@ -394,7 +337,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (jsonData.length > 0) {
     createTableHeaders(jsonData);
     displayRecords(jsonData);
-    addDropdownToAllRows(); // Add this line to ensure dropdowns are added after records are displayed
+    // addDropdownToAllRows(); // Add this line to ensure dropdowns are added after records are displayed
   } else {
     console.log("No data to display");
   }
@@ -428,7 +371,3 @@ function popup() {
 
 };
 
-
-
-// [2, 2, 5]
-// [1, 2, 5]

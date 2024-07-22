@@ -28,28 +28,34 @@
         let sumrisedata = getData.replace(/\s+/g, ' ').trim()
         showvalueontop.value = sumrisedata;
       })
-    })
-
-
+   })
+   popup()
   });
 
 </script>
 </head>
 <!-- ******************************************************************************************************* -->
 
+<div class="main-body>">
 <div class="upload-container">
-  <form id="upload-form">
+  <form id="upload-form" method="POST" name ='file' action="/upload_file/" enctype="multipart/form-data">
 
-    <input type="file" id="file-input" accept=".xlsx">
+    <input type="file" id="file-input" name ="file" accept=".xlsx">
+
 
     <button type="submit" class="upload-button">Upload</button>
   </form>
+    {% if success %}
+        <p style="color: green;">{{ success }}</p>
+    {% elif error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
 </div>
 
 <!-- ******************************************************************************************************* -->
-
 <h2 id="heading">Packof</h2>
 <div class="textareadata">
+ 
   <textarea name="" id="showvalueontop"></textarea>
 </div>
 <div class="tabledatadiv">
@@ -60,34 +66,9 @@
 </div>
 
 
-<!-- ******************************************************************************************************* -->
-<table id="recordsTable">
-  <thead></thead>
-  <tbody></tbody>
-</table>
-
-<!-- ******************************************************************************************************* -->
-<h3 style="display: none" ;">Color Combination Table</h3>
-<form id="color-combination-form" method="get" action="/packof" style="display: none;">
-  <table class="packoftable" name="text">
-    <thead>
-      <tr>
-        <th>Pack of</th>
-        <th>Color 1</th>
-        <th>Color 2</th>
-        <th>Color 3</th>
-        <th>Color 4</th>
-      </tr>
-    </thead>
-    <tbody id="table-body">
-    </tbody>
-  </table>
-  <button type="submit" class="button">Submit</button>
-</form>
-
 <div id="next-button-container">
   <button class="next-button" onclick="window.location.href='{% url 'packof_next' %}'">Next</button>
 </div>
 <!-- ******************************************************************************************************* -->
-
+</div>
 {% endblock %}

@@ -5,21 +5,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}My Django App{% endblock %}</title>
+    <title>{% block title %}Kai{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="icon" href="{% static 'images/Png.ico' %}" type="image/x-icon">
-    {% block extra_head %}{% endblock %}
+       {% block extra_head %}{% endblock %}
 </head>
+
 <body>
+    <div class="container">
     <div class="sidenav">
-        <a href="{% url 'packof' %}">Create Pack</a>
-        <!-- <a href="{% url 'view_data' %}">Content Creation</a> -->
-        <!-- Add more links as needed -->
+        <a href="{% url 'index' %}">Home</a>        
+        <a href="{% url 'packof' %}">Create Pack</a>  
     </div>
 
     <div class="main">
         {% block content %}
         {% endblock %}
+    </div>
     </div>
 </body>
 </html>

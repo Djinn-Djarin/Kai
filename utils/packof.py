@@ -1,24 +1,21 @@
 import pandas as pd
 import os
 
-# Get the absolute path of the project directory
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Path to the Excel file
+
 EXCEL_FILE_PATH = os.path.join(BASE_DIR, 'data', 'data.xlsx')
 
-# Path to the Excel file
+
 file_path= os.path.join(BASE_DIR, 'data', 'data.xlsx')
-# Load the Excel file
-# file_path = 'New Microsoft Excel Worksheet.xlsx'
+
 df = pd.read_excel(file_path)
 
-# Strip any leading or trailing spaces from the column names
+
 df.columns = df.columns.str.strip()
                                                  
-# Print column names to verify the correct names
 
-# Define the inputs for colors and packs
 colors = ["red", "green", "white"]
 packs = [1, 2, 3, 4, 5, 6, 8, 10]
 

@@ -8,8 +8,8 @@
 </head>
 <link rel="stylesheet" type="text/css" href="{% static 'css/packof_next.css' %}">
 
-<script src="{% static 'js/packof.js' %}"></script>
 <!-- ******************************************************************************************************* -->
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const jsonData = JSON.parse('{{ df_json|escapejs }}');
@@ -36,58 +36,78 @@
 </head>
 <!-- ******************************************************************************************************* -->
 
+<div class="mainContainer">
 
 
-<h2 id="heading">Packof</h2>
+  <div class="mainSideContainer">
+    <h2 id="heading">Packof</h2>
+    <div class="textAreaWrapper">
+      <textarea name="" id="TextArea"></textarea> <!--showvalueontop -->
+    </div>
 
-<div class="textareadata">
-  <textarea name="" id="showvalueontop"></textarea>
-</div>
+    <form id="inbound_data" method="get" action="/packof">
+      <div class="tableDiv">
+        <table id="recordsTable">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <!-- <button type="submit" id="Sendjsondata" class="button">Submit</button> -->
 
-<form id="inbound_data" method="get" action="/packof">
-  <div class="tabledatadiv">
-    <table id="recordsTable">
-      <thead></thead>
-      <tbody></tbody>
-    </table>
+    </form>
   </div>
-  <button type="submit" class="button">Submit</button>
 
-</form>
 
-<!-- ******************************************************************************************************* -->
 
-<h3>Color Combination Table</h3>
+  <!-- ******************************************************************************************************* -->
 
-<form id="color-combination-form" method="get" action="/packof" style="display: none;">
-  <table class="packoftable" name="text">
-    <thead>
-      <tr>
-        <th>Pack of</th>
-        <th>Color 1</th>
-        <th>Color 2</th>
-        <th>Color 3</th>
-        <th>Color 4</th>
-      </tr>
-    </thead>
-    <tbody id="table-body">
-    </tbody>
-  </table>
-  <button type="submit" class="button">Submit</button>
-</form>
+  <!-- <h3>Color Combination Table</h3> -->
 
-<!-- ******************************************************************************************************* -->
+  <!-- <form id="color-combination-form" method="get" action="/packof" style="display: none;">
+    <table class="packoftable" name="text">
+      <thead>
+        <tr>
+          <th>Pack of</th>
+          <th>Color 1</th>
+          <th>Color 2</th>
+          <th>Color 3</th>
+          <th>Color 4</th>
+        </tr>
+      </thead>
+      <tbody id="table-body">
+      </tbody>
+    </table>
+    <button type="submit" class="button">Submit</button>
+  </form> -->
 
-<table id="outputTable">
-  <thead>
+  <!-- ******************************************************************************************************* -->
 
-  </thead>
-  <tbody>
 
-    </thead>
-  </tbody>
-</table>
+  <div class="tablecontainer">
 
+    <div class="inputtable">
+      <div class="input-container">
+        <label for="packof">Pack of:</label>
+        <input type="text" id="packof" name="packof">
+        <label for="color">Color:</label>
+        <input type="text" id="color" name="color">
+        <button onclick="generateCells()">Generate Table</button>
+      </div>
+      <div class="rightsidecontainer">
+
+        <div class="table-container ">
+          <!-- <form > -->
+            <table id="mainTable">
+
+            </table>
+            <button type="submit" id="Sendjsondata">Submit</button>
+          <!-- </form> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="{% static 'js/packof_next.js' %}"></script>
 
 
 {% endblock %}

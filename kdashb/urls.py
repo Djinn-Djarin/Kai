@@ -16,14 +16,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-# from .views import upload_file
 from packof import views
+
+from packof.views import upload_file
+
+from django.conf import settings
+from django.conf.urls.static import static
+
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
+    path('', views.index, name='index'),
     path('packof/', views.packof, name='packof'),    
-    path('upload/', views.upload_file, name='upload_file'),
+    path('upload_file/', views.upload_file, name='upload_file'),
     path('view_data/', views.view_data, name='view_data'),
     path('packof_next/', views.packof_next, name='packof_next'),
   
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
