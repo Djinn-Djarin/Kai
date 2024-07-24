@@ -1,14 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Upload file</title>
+    <meta charset="UTF-8">
+    <title>Display JSON Data</title>
+    <style>
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
 </head>
 <body>
-    <h1>Upload file</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Upload</button>
-    </form>
+    <h1>DataFrame JSON Data</h1>
+    <div id="json-container"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Safely parse the JSON data embedded in the template
+            const jsonData = JSON.parse('{{ df_json|escapejs }}');
+            
+            // Find the container to display the JSON data
+            const container = document.getElementById("json-container");
+            
+            // Create a preformatted text element to display the JSON data
+            const pre = document.createElement("pre");
+            pre.textContent = JSON.stringify(jsonData, null, 2); // Pretty print the JSON data
+
+            // Append the pre element to the container
+            container.appendChild(pre);
+        });
+    </script>
 </body>
 </html>

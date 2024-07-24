@@ -116,52 +116,35 @@ def packof_next(request):
 
 @csrf_exempt
 def receive_data(request):
+    print(request.method)
     if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            print(data)  # Process the data as needed
-            return JsonResponse({"message": "Data received successfully", "data": data})
-        except json.JSONDecodeError:
-            return JsonResponse({"message": "Invalid JSON"}, status=400)
-    else:
-        return JsonResponse({"message": "Method not allowed"}, status=405)
+        data = json.loads(request.body)
+        print(data)
+
+        headers = data['headers']
+        headers = headers[1:]
+        print("this is header",headers)
+        rows = data['rows']
+        print("these are rows",rows)
+
+        df = pd.DataFrame(rows, columns=headers)
+        df.to_csv('output.csv', index=False)
+        print("DataFrame:")
+        print(df)
+        df_json = df.to_json(orient='records')
+
+        context = {
+        'df_json': df_json}
+        return HttpResponse(context)
+
+
+
+
+
 
 def test2(request):
     return render(request, 'test2.html')
-# def generated_table(request):
 
 
-# def packof(request):
-#     import json
-#     var = df
-#     pack_data = []
-#     for pack in range(1, 6):  # Assuming up to 5 packs
-#         pack_info = {
-#             'pack': request.GET.get(f'pack{pack}'),
-#             'colors': [
-#                 request.GET.get(f'color1_{pack}'),
-#                 request.GET.get(f'color2_{pack}'),
-#                 request.GET.get(f'color3_{pack}'),
-#                 request.GET.get(f'color4_{pack}'),
-#             ]
-#         }
-#         pack_data.append(pack_info)   
-
-#     logger = getLogger('kdashb')  # Replace 'my_app' with your logger name
-#     logger.debug(f"Pack information: {pack_data}")  # Use f-strings for clear formatting
-
-#     file_name = 'data.xlsx'
-#     file_path = os.path.join(settings.MEDIA_ROOT, 'uploaded_files', file_name)
-#     df1 = pd.read_excel(file_path)
-
-#     # Convert DataFrame to JSON
-#     df_json = df1.to_json(orient='records')
-
-#     # Pass JSON to context
-#     context = {
-#         'df_json': df_json
-#     }
-
-    # return render(request, 'packof.html', { 'var':var,'context':context})
-
- 
+def test1(request):
+    return render(request, 'test1.html')

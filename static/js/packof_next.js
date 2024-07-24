@@ -16,6 +16,7 @@ let showvalueontop = document.getElementById('showvalueontop')
 Array.from(gettext).forEach((item) => {
   item.addEventListener('mouseover', () => {
     let getData = item.textContent;
+    console.log(getData);
     let sumrisedata = getData.replace(/\s+/g, ' ').trim()
     showvalueontop.value = sumrisedata;
   })
@@ -98,35 +99,35 @@ Sendjsondata.addEventListener('click', () => {
   let bottomcontainer = document.querySelector('.bottomcontainer').style.display = 'block'
   let rightsidecontainer = document.querySelector('.rightsidecontainer');
   rightsidecontainer.style.display = 'block'
-  let getdataval = document.querySelectorAll('.getidvalue');
-  let gettdval = [];
-  let filteredArraydata = [];
+  // let getdataval = document.querySelectorAll('.getidvalue');
+  // let gettdval = [];
+  // let filteredArraydata = [];
 
-  Array.from(getdataval).forEach((item) => {
-    gettdval.push(item.value);
-  });
+  // Array.from(getdataval).forEach((item) => {
+  //   gettdval.push(item.value);
+  // });
 
-  let filteredArray = gettdval.filter(item => item.trim() !== '');
-  console.log(filteredArray, "for filterArrayline110......");
-  filteredArraydata.push(...filteredArray);
+  // let filteredArray = gettdval.filter(item => item.trim() !== '');
+  // console.log(filteredArray, "for filterArrayline110......");
+  // filteredArraydata.push(...filteredArray);
 
-  const funcalling = divideArray(filteredArraydata, colorsdata.length);
-  console.log(funcalling, "funcallingarray");
-  const getcolorarraylenght = colorsdata.length;
-  const getlastarray = funcalling.splice(-getcolorarraylenght);
-  let resultArray = [];
-  console.log(duplicatepackofarray, "duplicateArray", );
-  console.log(getlastarray,":getlastarray");
-  duplicatepackofarray.forEach((item, i) => {
-    if (getlastarray[i]) {
-      let obj = {};
-      obj[item] = getlastarray[i];
-      resultArray.push(obj);
-    }
-  });
-  resultArray.push(...colorsvalues)
-  console.log(resultArray, "getfinalobj");
-  outsideResultArray.push(...resultArray)
+  // const funcalling = divideArray(filteredArraydata, colorsdata.length);
+  // console.log(funcalling, "funcallingarray");
+  // const getcolorarraylenght = colorsdata.length;
+  // const getlastarray = funcalling.splice(-getcolorarraylenght);
+  // let resultArray = [];
+  // console.log(duplicatepackofarray, "duplicateArray", );
+  // console.log(getlastarray,":getlastarray");
+  // duplicatepackofarray.forEach((item, i) => {
+  //   if (getlastarray[i]) {
+  //     let obj = {};
+  //     obj[item] = getlastarray[i];
+  //     resultArray.push(obj);
+  //   }
+  // });
+  // resultArray.push(...colorsvalues)
+  // console.log(resultArray, "getfinalobj");
+  // outsideResultArray.push(...resultArray)
 
 
   // fetch('//', {
@@ -150,9 +151,38 @@ Sendjsondata.addEventListener('click', () => {
   //     console.error('Error:', error);
   //     document.getElementById('message').innerText = 'An error occurred. Please try again.';
   //   });
+  const table = document.getElementById('mainTable');
+  const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent);
+  const rows = Array.from(table.querySelectorAll('tbody tr')).map(tr => {
+    return Array.from(tr.querySelectorAll('td input.getidvalue')).map(input => {
+      return input.value;
+    });
+  });
+  console.log({headers,rows});
+  let jsonObject = {headers,rows}
 
-
+  fetch('/receive_data/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(jsonObject)
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Success:', data);
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
 });
+
+
+
+
+
+
+
 
 function divideArray(arr, n) {
   const result = [];

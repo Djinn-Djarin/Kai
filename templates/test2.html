@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dynamic Table</title>
 </head>
+
 <body>
   <table id="mainTable">
     <thead id="tableHead">
@@ -18,64 +20,74 @@
 
   <script>
     // Example data
-    const columns = ['Name', 'Age', 'Email'];
-    const rows = [
-      ['John Doe', 25, 'john@example.com'],
-      ['Jane Smith', 30, 'jane@example.com']
-    ];
+    const tableData = {
+      "headers": [
+        "Number",
+        "a",
+        "b",
+        "c"
+      ],
+      "rows": [
+        ["1", "2", "3"],
+        ["1", "1", "1"],
+        ["66", "1", "1"]
+      ]
+    }
 
-    // Generate table head
+    // Populate the table with data
     const tableHead = document.getElementById('tableHead');
-    const headRow = document.createElement('tr');
-    columns.forEach(column => {
+    const tableBody = document.getElementById('tableBody');
+
+    // Generate table headers
+    const headerRow = document.createElement('tr');
+    tableData.headers.forEach(header => {
       const th = document.createElement('th');
-      th.textContent = column;
-      headRow.appendChild(th);
+      th.textContent = header;
+      headerRow.appendChild(th);
     });
-    tableHead.appendChild(headRow);
+    tableHead.appendChild(headerRow);
 
     // Generate table rows
-    const tableBody = document.getElementById('tableBody');
-    rows.forEach(rowData => {
+    tableData.rows.forEach(row => {
       const tr = document.createElement('tr');
-      rowData.forEach(cellData => {
+      row.forEach(cell => {
         const td = document.createElement('td');
-        td.textContent = cellData;
+        td.textContent = cell;
         tr.appendChild(td);
       });
       tableBody.appendChild(tr);
     });
 
-    // Extract table data
-    function extractTableData() {
-      const table = document.getElementById('mainTable');
-      const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent);
-      const rows = Array.from(table.querySelectorAll('tbody tr')).map(tr => {
-        return Array.from(tr.querySelectorAll('td')).map(td => td.textContent);
-      });
-
-      return { headers, rows };
-    }
-
     // Send data to backend
     document.getElementById('sendDataButton').addEventListener('click', () => {
-      const tableData = extractTableData();
+      const sendButton = document.getElementById('sendDataButton');
+      sendButton.disabled = true; // Disable button while sending
 
-      fetch('http://127.0.0.1:8000/receive_data/', {
+      fetch('/receive_data/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(tableData)
       })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Success:', data);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+        .then(response => {
+          sendButton.disabled = false; // Enable button after response
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Success:', data);
+          // Display success message to user
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          sendButton.disabled = false; // Enable button on error
+          // Display error message to user
+        });
     });
   </script>
 </body>
+
 </html>
