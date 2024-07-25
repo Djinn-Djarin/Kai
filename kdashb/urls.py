@@ -28,11 +28,16 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
-    path('packof/', views.packof, name='packof'),    
-    path('upload_file/', views.upload_file, name='upload_file'),
-    path('view_data/', views.view_data, name='view_data'),
+ 
+    path('upload/', views.upload_file, name='upload_file'),
     path('packof_next/', views.packof_next, name='packof_next'),
-    path('receive_data/', views.receive_data, name='receive_data'),
+    path('get_color_comb/', views.get_color_comb, name='receive_color_comb'),
+    path('f_packof/<str:file_name>/', views.f_packof, name='f_packof'),
+
+    path('packof/<str:file_name>/', views.packof, name='packof'),
+    path('packof_next/<str:file_name>/', views.packof_next, name='packof_next'),
+
+
     path('test1/', views.test1, name='test1'),
     path('test2/', views.test2, name='test2'),
     

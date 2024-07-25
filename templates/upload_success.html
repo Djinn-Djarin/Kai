@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Upload successful</title>
-</head>
 <body>
-    <h1>Upload successful</h1>
-    <p>File uploaded at: <a href="{{ uploaded_file_url }}">{{ uploaded_file_url }}</a></p>
+    <h2>Upload File</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload</button>
+    </form>
 </body>
 </html>

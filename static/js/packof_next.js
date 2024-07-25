@@ -11,16 +11,19 @@ let outsideflatedarray = [];
 let outsideResultArray = []
 
 let colorsvalues = [];
-let gettext = document.querySelectorAll('td');
-let showvalueontop = document.getElementById('showvalueontop')
-Array.from(gettext).forEach((item) => {
-  item.addEventListener('mouseover', () => {
-    let getData = item.textContent;
-    console.log(getData);
-    let sumrisedata = getData.replace(/\s+/g, ' ').trim()
-    showvalueontop.value = sumrisedata;
-  })
-})
+setTimeout(() => {
+  
+  let gettext = document.querySelectorAll('td');
+  let showvalueontop = document.getElementById('TextArea');
+  Array.from(gettext).forEach((item) => {
+    item.addEventListener('mouseover', () => {
+      let getData = item.textContent;
+      console.log(getData);
+      let sumrisedata = getData.replace(/\s+/g, ' ').trim()
+      showvalueontop.value = sumrisedata;
+    })
+  });
+}, 1000);
 
 function generateCells() {
   console.log('this is for genrate table');
@@ -51,7 +54,7 @@ function generateCells() {
     // Create the table header
     const thead = document.createElement('thead');
     const headerRow = document.createElement('tr');
-    const headers = ['Number', ...colors];
+    const headers = ['Pack_of', ...colors];
     console.log(colors, "colors.....");
     colorsdata.push(...colors);
     headers.forEach(headerText => {
@@ -91,95 +94,56 @@ function generateCells() {
   }
 }
 
+
 let Sendjsondata = document.getElementById('Sendjsondata');
 console.log(Sendjsondata, ": sendjsondata");
 
 Sendjsondata.addEventListener('click', () => {
-  console.log('this is log for SendJsonData');
-  let bottomcontainer = document.querySelector('.bottomcontainer').style.display = 'block'
-  let rightsidecontainer = document.querySelector('.rightsidecontainer');
-  rightsidecontainer.style.display = 'block'
-  // let getdataval = document.querySelectorAll('.getidvalue');
-  // let gettdval = [];
-  // let filteredArraydata = [];
+    console.log('this is log for SendJsonData');
+    let bottomcontainer = document.querySelector('.bottomcontainer').style.display = 'block'
+    let rightsidecontainer = document.querySelector('.rightsidecontainer');
+    rightsidecontainer.style.display = 'block'
+    const table = document.getElementById('mainTable');
+    const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent);
+    const rows = Array.from(table.querySelectorAll('tbody tr')).map(tr => {
+        // Get values for PackOf
+        let PackOf = Array.from(tr.querySelectorAll('td input.getidvalue')).map(input => {
+            return input.value;
+        });
 
-  // Array.from(getdataval).forEach((item) => {
-  //   gettdval.push(item.value);
-  // });
+        // Get text content of tds
+        let tdVal = Array.from(tr.querySelectorAll('td')).map(td => {
+            return td.textContent;
+        });
 
-  // let filteredArray = gettdval.filter(item => item.trim() !== '');
-  // console.log(filteredArray, "for filterArrayline110......");
-  // filteredArraydata.push(...filteredArray);
+        // Remove extra elements from tdVal if needed
+        tdVal.splice(1);
+        // Add tdVal to PackOf
 
-  // const funcalling = divideArray(filteredArraydata, colorsdata.length);
-  // console.log(funcalling, "funcallingarray");
-  // const getcolorarraylenght = colorsdata.length;
-  // const getlastarray = funcalling.splice(-getcolorarraylenght);
-  // let resultArray = [];
-  // console.log(duplicatepackofarray, "duplicateArray", );
-  // console.log(getlastarray,":getlastarray");
-  // duplicatepackofarray.forEach((item, i) => {
-  //   if (getlastarray[i]) {
-  //     let obj = {};
-  //     obj[item] = getlastarray[i];
-  //     resultArray.push(obj);
-  //   }
-  // });
-  // resultArray.push(...colorsvalues)
-  // console.log(resultArray, "getfinalobj");
-  // outsideResultArray.push(...resultArray)
+        PackOf.unshift(tdVal[0]);
 
 
-  // fetch('//', {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json'
-  //   },
-  //   body: JSON.stringify(resultArray)
-  // })
-  //   .then(response => {
-  //     console.log(response, "for response");
-  //     response.json()
-  //   })
-  //   .then(data => {
-  //     if (data.message) {
-  //       document.getElementById('message').innerText = data.message;
-  //     }
-
-  //   })
-  //   .catch((error) => {
-  //     console.error('Error:', error);
-  //     document.getElementById('message').innerText = 'An error occurred. Please try again.';
-  //   });
-  const table = document.getElementById('mainTable');
-  const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent);
-  const rows = Array.from(table.querySelectorAll('tbody tr')).map(tr => {
-    return Array.from(tr.querySelectorAll('td input.getidvalue')).map(input => {
-      return input.value;
+        return { PackOf };
     });
-  });
-  console.log({headers,rows});
-  let jsonObject = {headers,rows}
 
-  fetch('/receive_data/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(jsonObject)
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log('Success:', data);
-  })
-  .catch((error) => {
-    console.error('Error:', error);
-  });
+    console.log({ headers, rows });
+
+    const jsonObject = { headers, rows }
+    fetch('/receive_data/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonObject)
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
 });
-
-
-
-
 
 
 
@@ -256,8 +220,6 @@ document.addEventListener("DOMContentLoaded", function () {
 // ****************************************************************************************
 
 let rowCount = 0;
-
-
 document.addEventListener('DOMContentLoaded', (event) => {
   // Add 5 rows by default
   for (let i = 0; i < 5; i++) {
@@ -265,19 +227,19 @@ document.addEventListener('DOMContentLoaded', (event) => {
   }
 });
 
-function addRow() {
-  rowCount++;
-  const tableBody = document.getElementById('table-body');
-  const row = document.createElement('tr');
-  row.innerHTML = `
-          <td><input type="number" name="pack${rowCount}" value="${rowCount}"></td>
-          <td><input type="number" name="color1_${rowCount}" value="0"></td>
-          <td><input type="number" name="color2_${rowCount}" value="0"></td>
-          <td><input type="number" name="color3_${rowCount}" value="0"></td>
-          <td><input type="number" name="color4_${rowCount}" value="0"></td>
-      `;
-  tableBody.appendChild(row);
-}
+// function addRow() {
+//   rowCount++;
+//   const tableBody = document.getElementById('table-body');
+//   const row = document.createElement('tr');
+//   row.innerHTML = `
+//           <td><input type="number" name="pack${rowCount}" value="${rowCount}"></td>
+//           <td><input type="number" name="color1_${rowCount}" value="0"></td>
+//           <td><input type="number" name="color2_${rowCount}" value="0"></td>
+//           <td><input type="number" name="color3_${rowCount}" value="0"></td>
+//           <td><input type="number" name="color4_${rowCount}" value="0"></td>
+//       `;
+//   tableBody.appendChild(row);
+// }
 
 document.getElementById('upload-form').addEventListener('submit', function (event) {
   event.preventDefault();
@@ -320,10 +282,6 @@ function createTableHeaders(data) {
     headerRow.appendChild(th);
   });
 
-  // const th = document.createElement("th");
-  // th.textContent = "Dropdown"; // Adding header for the dropdown column
-  // headerRow.appendChild(th);
-
   tableHead.appendChild(headerRow);
 }
 
@@ -340,7 +298,6 @@ function displayRecords(data) {
       cell.textContent = record[key];
       row.appendChild(cell);
     });
-
 
     tableBody.appendChild(row);
   });
@@ -388,3 +345,102 @@ function popup() {
 
 };
 
+
+// adding function to show input number and packof in small table at bottom side, this table is immutable
+function createTableHeaders(data) {
+  const tableHead = document.querySelector("#mainTable thead");
+  tableHead.innerHTML = "";
+  const headers = Object.keys(data[0]);
+  const headerRow = document.createElement("tr");
+  console.log(headerRow)
+
+  headers.forEach(header => {
+    const th = document.createElement("th");
+    th.className = 'maintabledata'
+    th.textContent = header.charAt(0).toUpperCase() + header.slice(1);
+    headerRow.appendChild(th);
+  });
+
+  tableHead.appendChild(headerRow);
+}
+
+function displayRecords(data) {
+  const tableBody = document.querySelector("#maintable tbody");
+  tableBody.innerHTML = "";
+
+  data.forEach(record => {
+    const row = document.createElement("tr");
+
+    Object.keys(record).forEach(key => {
+      const cell = document.createElement("td");
+      cell.className = 'maintabledata'
+      cell.textContent = record[key];
+      row.appendChild(cell);
+    });
+
+    tableBody.appendChild(row);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const jsonData = JSON.parse('{{ df_json_sm_table|escapejs }}');
+
+  if (jsonData.length > 0) {
+    createTableHeaders(jsonData);
+    displayRecords(jsonData);
+
+  } else {
+    console.log("No data to display");
+  }
+
+});
+
+
+// parsing and displaying the processed data 
+function createTableHeaders(data) {
+  const tableHead = document.querySelector("#recordsTable thead");
+  tableHead.innerHTML = "";
+  const headers = Object.keys(data[0]);
+  const headerRow = document.createElement("tr");
+  console.log(headerRow)
+
+  headers.forEach(header => {
+    const th = document.createElement("th");
+    th.className = 'maintabledata'
+    th.textContent = header.charAt(0).toUpperCase() + header.slice(1);
+    headerRow.appendChild(th);
+  });
+
+  tableHead.appendChild(headerRow);
+}
+
+function displayRecords(data) {
+  const tableBody = document.querySelector("#recordsTable tbody");
+  tableBody.innerHTML = "";
+
+  data.forEach(record => {
+    const row = document.createElement("tr");
+
+    Object.keys(record).forEach(key => {
+      const cell = document.createElement("td");
+      cell.className = 'maintabledata'
+      cell.textContent = record[key];
+      row.appendChild(cell);
+    });
+
+    tableBody.appendChild(row);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const jsonData = JSON.parse('{{ data|escapejs }}');
+
+  if (jsonData.length > 0) {
+    createTableHeaders(jsonData);
+    displayRecords(jsonData);
+
+  } else {
+    console.log("No data to display");
+  }
+
+});

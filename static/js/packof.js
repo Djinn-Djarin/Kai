@@ -174,15 +174,6 @@ function divideArray(arr, n) {
 }
 
 
-
-
-
-
-
-
-
-
-
 function uploadfile() {
   document.getElementById('upload-button').addEventListener('click', function () {
     let fileInput = document.getElementById('fileInput');
@@ -329,65 +320,7 @@ function displayRecords(data) {
   });
 }
 
-function createDropdown() {
-  // Create the dropdown element
-  var select = document.createElement('select');
 
-  // Create the Sync option
-  var optionSync = document.createElement('option');
-  optionSync.value = 'sync';
-  optionSync.text = 'Sync';
-  select.appendChild(optionSync);
-
-  // Create the Async option
-  var optionAsync = document.createElement('option');
-  optionAsync.value = 'async';
-  optionAsync.text = 'Async';
-  select.appendChild(optionAsync);
-
-  return select;
-}
-
-function addDropdownToAllRows() {
-  // Get all rows in the table, skipping the header row
-  var rows = document.querySelectorAll('#recordsTable tbody tr');
-
-  // Iterate through each row
-  rows.forEach(function (row) {
-    // Create a new dropdown
-    var dropdown = createDropdown();
-
-    // Get the fifth cell or create it if it doesn't exist
-    var cell = row.cells[2];
-    if (!cell) {
-      cell = row.insertCell(2);
-    } else {
-      // Clear any existing content
-      cell.innerHTML = '';
-    }
-
-    // Append the dropdown to the fifth cell
-    cell.appendChild(dropdown);
-  });
-}
-
-function applySelectedOptionToAll() {
-  // Get the value of the first dropdown in the table
-  var firstDropdown = document.querySelector('#recordsTable tbody tr select');
-  if (!firstDropdown) return;
-
-  var selectedValue = firstDropdown.value;
-
-  // Get all dropdowns in the table
-  var dropdowns = document.querySelectorAll('#recordsTable tbody select');
-
-  // Iterate through each dropdown and set its value to the selected value
-  dropdowns.forEach(function (dropdown) {
-    dropdown.value = selectedValue;
-  });
-}
-
-// Ensure the addDropdownToAllRows is called at the right time
 document.addEventListener("DOMContentLoaded", function () {
   const jsonData = JSON.parse('{{ df_json|escapejs }}');
 
@@ -429,6 +362,3 @@ function popup() {
 };
 
 
-
-// [2, 2, 5]
-// [1, 2, 5]

@@ -1,95 +1,85 @@
 import pandas as pd
-import os
 
+def packof_func(df_comb, file_path):
+    df = pd.read_excel(file_path)
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # Function to split dataframe into individual row dataframes
+    def split_dataframes(df): 
+        dataframes = []
+        for i in range(len(df)):
+            row_df = pd.DataFrame(df.iloc[i]).transpose() 
+            dataframes.append(row_df)
+        return dataframes
 
+    dataframes = split_dataframes(df)
 
-EXCEL_FILE_PATH = os.path.join(BASE_DIR, 'data', 'data.xlsx')
+    # Function to copy specified columns
+    def addCopyColumns(original_df, target_df):
+        list_of_copy_cols = ["Part NU", "HSN Code", "GST", "Product Weight(kg)", "Key words", 
+                             "Dimension", "Description", "Bullet Point 2", "Bullet Point 3", 
+                             "Bullet Point 4", "Bullet Point 5", "L", "W", "H", "Material", 
+                             "Category", "Design"]
 
+        for col in list_of_copy_cols:
+            if col in original_df.columns and col in target_df.columns:
+                target_df[col] = target_df[col].ffill()
+        return target_df
 
-file_path= os.path.join(BASE_DIR, 'data', 'data.xlsx')
+    # Function to dynamically update data
+    def dynamicData(df, packof, colors):
+        for i, row in df.iterrows():
+            category_value = row['Category']
+            material_value = row['Material']
+            dimension_value = row['Dimension']
+            part_nu_value = row['Part NU']
+            single_pack_value = row['Single Pack']
 
-df = pd.read_excel(file_path)
+            pieces_value = packof * single_pack_value
+            bullet_point_color_str = " | ".join([f"{count} pieces {color}" for color, count in colors.items() if count > 0])
+            product_name_color_str = " | ".join([color for color, count in colors.items() if count > 0])
+            color_str = ", ".join([color for color, count in colors.items() if count > 0])
 
+            df.at[i, "Bullet Point 1"] = (f"PACKAGE CONTAIN: Pack of {packof} | {category_value} | MATERIAL: {material_value} | DIMENSION: {dimension_value} CM | {bullet_point_color_str} | {part_nu_value}")
+            df.at[i, 'Product Name'] = (f"Kuber Industries Pack of {packof} Portable 4 Layer Shoe Storage Organizer | Easy to Install | Detachable | Footwear Organiser with Wheel | Door-Entrance Living-Room Balcony Decor | 203-4LA | {product_name_color_str}")
+            df.at[i, "Pack of"] = packof
+            df.at[i, "Pieces"] = pieces_value
+            df.at[i, "Color"] = color_str
 
-df.columns = df.columns.str.strip()
-                                                 
+        return df
 
-colors = ["red", "green", "white"]
-packs = [1, 2, 3, 4, 5, 6, 8, 10]
+    # Container for final result
+    datacontainer = pd.DataFrame()
 
-# Generate combinations of colors and packs
-combinations = [(color, pack) for color in colors for pack in packs]
-x = len(combinations) # to identify number of empty rows to be inserted.                                                     
+    # List of packs and colors
+    packof_list = df_comb['Pack_of'].to_list()
+    color_list = df_comb.columns[1:].to_list()
 
-# Create an empty DataFrame to store all results
-final_combined_df = pd.DataFrame()
+    # Processing each dataframe
+    for df in dataframes:
+        # Add the original row to the final DataFrame
+        datacontainer = pd.concat([datacontainer, df], ignore_index=True)
 
-# Iterate over each row in the input DataFrame
-for index, unique_row in df.iterrows():
-    # Create a dataframe with x empty rows
-    empty_rows = pd.DataFrame(index=range(x), columns=df.columns)   
+        for packs in packof_list:
+            new_df = df.copy()
+            result_df = addCopyColumns(df, new_df)
 
-    # Combine the current row with the empty rows
-    combined_df = pd.concat([unique_row.to_frame().T, empty_rows], ignore_index=True)
+            colors = {color: df_comb.loc[df_comb['Pack_of'] == packs, color].values[0] for color in color_list}
+            dy_rows = dynamicData(result_df, packs, colors)
 
-    # Define the new column names
-    new_columns = df.columns
+            datacontainer = pd.concat([datacontainer, dy_rows], ignore_index=True)
 
-    # Adjust the new columns to match the length of the current columns
-    adjusted_columns = new_columns[:len(combined_df.columns)]
+    return datacontainer
 
-    # Assign the new column names to the dataframe
-    combined_df.columns = adjusted_columns
+# Example usage:
+# df_comb_data = {
+#     'Pack_of': [2, 3, 4, 5, 6, 8, 10, 12],
+#     'red':     [1, 1, 2, 2, 3, 2, 5, 6],
+#     'green':   [1, 1, 2, 2, 3, 2, 5, 0],
+#     'yellow':  [0, 1, 0, 1, 0, 2, 0, 6],
+#     'white':   [0, 0, 0, 0, 0, 2, 0, 0],
+# }
 
-    # Define the adjusted columns to be filled with the first row's values
-    adjusted_columns_to_fill = [
-        "Part NU", "HSN Code", "GST", "Product Weight(kg)", "Key words", 
-        "Dimension", "Description", "Bullet Point 2", "Bullet Point 3", 
-        "Bullet Point 4", "Bullet Point 5", "L", "W", "H", "Material", "Category", "Single Pack"
-    ]
-
-    # Fill the empty rows with the first row's values for the specified columns
-    for column in adjusted_columns_to_fill:
-        combined_df.loc[1:, column] = unique_row[column]
-
-    # Fill the "Color" and "Pack of" columns with the correct values
-    color_values = [color for color in colors for _ in range(len(packs))]
-    pack_values = packs * len(colors)
-
-    # Ensure we fill only the required rows to avoid index mismatch
-    combined_df.loc[1:x+1, "Color"] = color_values
-    combined_df.loc[1:x+1, "Pack of"] = pack_values
-
-    # Extract necessary values from the unique row for the new Bullet Point 1
-    category_value = unique_row.get('Category', 'Unknown Category')
-    material_value = unique_row.get('Material', 'Unknown Material')
-    dimension_value = unique_row.get('Dimension', 'Unknown Dimension')
-    part_nu_value = unique_row.get('Part NU', 'Unknown Part NU')
-
-    # Update the Bullet Point 1 column based on the specified format
-    combined_df.loc[1:x+1, 'Bullet Point 1'] = combined_df.loc[1:x+1].apply(
-        lambda row: f"PACKAGE CONTAIN: Pack of {row['Pack of']} | {category_value} | MATERIAL: {material_value} | DIMENSION: {dimension_value} CM | {row['Color']} | {part_nu_value}",
-        axis=1
-    )
-
-    # Update the Product Name column based on the specified format
-    combined_df.loc[1:x+1, 'Product Name'] = combined_df.loc[1:x+1].apply(
-        lambda row: f"Kuber Industries Pack of {row['Pack of']} Portable 4 Layer Shoe Storage Organizer| Easy to Installation Detachable | Footwear Organiser with Wheel |Door-Entrance Living-Room Balcony Decor| 203-4LA | {row['Color']}",
-        axis=1
-    )
-
-    # Update the Pieces column based on the formula
-    combined_df.loc[1:x+1, 'Pieces'] = combined_df.loc[1:x+1].apply(
-        lambda row: row['Pack of'] * unique_row['Single Pack'],
-        axis=1
-    )
-
-    # Append the results to the final_combined_df
-    final_combined_df = pd.concat([final_combined_df, combined_df])
-    
-# Save the updated dataframe to a new CSV file
-output_file_path = 'Updated_Dataset_All_Rows.csv'
-final_combined_df.to_csv(output_file_path, index=False)
-final_combined_df
+# df_comb = pd.DataFrame(df_comb_data)
+# file_path = '/mnt/data/data.xlsx'
+# final_df = process_shoe_storage_data(df_comb, file_path)
+# final_df
